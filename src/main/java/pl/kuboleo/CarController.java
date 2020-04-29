@@ -3,24 +3,39 @@ package pl.kuboleo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class CarController {
 
-    @GetMapping("/car")
-    public String getCar(Model model) {
+    private List<Car> cars;
 
+    public CarController() {
         Car car1 = new Car("BMW", "i8");
         Car car2 = new Car("Polonez", "caro");
-        Car car3 = new Car("Fiat", "126p");
-        Car car4 = new Car("Hyundai", "i30");
+        Car car3 = new Car("Hyundai", "i30");
+        cars = new ArrayList<>();
+        cars.add(car1);
+        cars.add(car2);
+        cars.add(car3);
+    }
 
-        List<Car> cars = Arrays.asList(car1, car2, car3, car4);
-
+    @GetMapping("/car")
+    public String getCar(Model model) {
         model.addAttribute("cars", cars);
+        model.addAttribute("newCar", new Car());
         return "car";
     }
+
+    @PostMapping("/addCar")
+    public String addCar(@ModelAttribute Car car){
+        cars.add(car);
+        return "redirect:/car";
+    }
+
+
 }
